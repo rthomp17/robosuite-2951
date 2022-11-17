@@ -16,9 +16,9 @@ setup(
     packages=[package for package in find_packages() if package.startswith("robosuite")],
     install_requires=[
         "numpy>=1.20.0",
-        "numba>=0.52.0,<=0.53.1",
+        "numba>=0.52.0,<=0.57.0",
         "scipy>=1.2.3",
-        "free-mujoco-py==2.1.6",
+        "mujoco-py==2.1.2.14",
     ],
     eager_resources=["*"],
     include_package_data=True,

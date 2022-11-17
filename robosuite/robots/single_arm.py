@@ -264,7 +264,7 @@ class SingleArm(Manipulator):
             self.recent_qpos.push(self._joint_positions)
             self.recent_actions.push(action)
             self.recent_torques.push(self.torques)
-            self.recent_ee_forcetorques.push(np.concatenate((self.ee_force, self.ee_torque)))
+            #self.recent_ee_forcetorques.push(np.concatenate((self.ee_force, self.ee_torque)))
             self.recent_ee_pose.push(np.concatenate((self.controller.ee_pos, T.mat2quat(self.controller.ee_ori_mat))))
             self.recent_ee_vel.push(np.concatenate((self.controller.ee_pos_vel, self.controller.ee_ori_vel)))
 
@@ -322,8 +322,17 @@ class SingleArm(Manipulator):
             def gripper_qvel(obs_cache):
                 return np.array([self.sim.data.qvel[x] for x in self._ref_gripper_joint_vel_indexes])
 
-            sensors += [gripper_qpos, gripper_qvel]
-            names += [f"{pf}gripper_qpos", f"{pf}gripper_qvel"]
+            @sensor(modality=modality)
+            def left_tip_site_force(obs_cache):
+                return np.array(self.left_tip_force)
+
+            @sensor(modality=modality)
+            def right_tip_site_force(obs_cache):
+                return np.array(self.right_tip_force)
+
+
+            sensors += [gripper_qpos, gripper_qvel, left_tip_site_force, right_tip_site_force]
+            #names += [f"{pf}gripper_qpos", f"{pf}gripper_qvel", f"{pf}left_tip_force",  f"{pf}right_tip_force"]
 
         # Create observables for this robot
         for name, s in zip(names, sensors):
@@ -368,14 +377,32 @@ class SingleArm(Manipulator):
         Returns:
             np.array: force applied at the force sensor at the robot arm's eef
         """
-        return self.get_sensor_measurement(self.gripper.important_sensors["force_ee"])
+        return None #self.get_sensor_measurement(self.gripper.important_sensors["force_ee"])
+
+    @property
+    def left_tip_force(self):
+        """
+        Returns:
+            np.array: force applied at the force sensor at the robot arm's eef
+        """
+        return None #self.get_sensor_measurement("gripper0_left_tip_force")
+
+
+    @property
+    def right_tip_force(self):
+        """
+        Returns:
+            np.array: force applied at the force sensor at the robot arm's eef
+        """
+        return None #self.get_sensor_measurement("gripper0_right_tip_force")
+
 
     @property
     def ee_torque(self):
         """
         Returns torque applied at the torque sensor at the robot arm's eef
         """
-        return self.get_sensor_measurement(self.gripper.important_sensors["torque_ee"])
+        return None #self.get_sensor_measurement(self.gripper.important_sensors["torque_ee"])
 
     @property
     def _hand_pose(self):

@@ -1,0 +1,11 @@
+<mujoco model="cylinder_hand">
+	<compiler angle="radian" />
+	<worldbody>
+        <body name="eef" pos="0 0 0" quat="0.707107 0 0 -0.707107">
+        	<site name="grip_site" pos="0 0 0" size="0.01 0.01 0.01" rgba="1 0 0 0.5" type="sphere" group="1"/>
+        	<site name="grip_site_cylinder" pos="0 0 0" size="0.005 10" rgba="0 1 0 0.3" type="cylinder" group="1"/>
+        	<geom name="finger_collision" rgba="1 0 0 1" size=".015 .05 .015" pos="0 0 0" quat="0 0 1 0" type="cylinder" margin="0.001"/>
+        	<geom name="finger_visual" rgba="1 0 0 1" size=".015 .05 .015" pos="0 0 0" quat="0 0 1 0" contype="0" conaffinity="0" group="1" type="cylinder" margin="0.001"/>
+       </body>
+</worldbody>
+</mujoco>

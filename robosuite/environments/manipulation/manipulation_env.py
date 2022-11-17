@@ -221,23 +221,24 @@ class ManipulationEnv(RobotEnv):
             bool: True if the gripper is grasping the given object
         """
         # Convert object, gripper geoms into standardized form
-        if isinstance(object_geoms, MujocoModel):
-            o_geoms = object_geoms.contact_geoms
-        else:
-            o_geoms = [object_geoms] if type(object_geoms) is str else object_geoms
-        if isinstance(gripper, GripperModel):
-            g_geoms = [gripper.important_geoms["left_fingerpad"], gripper.important_geoms["right_fingerpad"]]
-        elif type(gripper) is str:
-            g_geoms = [[gripper]]
-        else:
-            # Parse each element in the gripper_geoms list accordingly
-            g_geoms = [[g_group] if type(g_group) is str else g_group for g_group in gripper]
+        # if isinstance(object_geoms, MujocoModel):
+        #     o_geoms = object_geoms.contact_geoms
+        # else:
+        #     o_geoms = [object_geoms] if type(object_geoms) is str else object_geoms
+        # if isinstance(gripper, GripperModel):
+        #     g_geoms = [gripper.important_geoms["left_fingerpad"], gripper.important_geoms["right_fingerpad"]]
+        # elif type(gripper) is str:
+        #     g_geoms = [[gripper]]
+        # else:
+        #     # Parse each element in the gripper_geoms list accordingly
+        #     g_geoms = [[g_group] if type(g_group) is str else g_group for g_group in gripper]
 
-        # Search for collisions between each gripper geom group and the object geoms group
-        for g_group in g_geoms:
-            if not self.check_contact(g_group, o_geoms):
-                return False
-        return True
+        # # Search for collisions between each gripper geom group and the object geoms group
+        # for g_group in g_geoms:
+        #     if not self.check_contact(g_group, o_geoms):
+        #         return False
+        # return True
+        return False
 
     def _gripper_to_target(self, gripper, target, target_type="body", return_distance=False):
         """
