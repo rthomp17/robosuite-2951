@@ -156,7 +156,7 @@ class Push(SingleArmEnv):
         control_freq=20,
         horizon=1000,
         ignore_done=False,
-        hard_reset=True,
+        hard_reset=False,
         camera_names="agentview",
         camera_heights=256,
         camera_widths=256,

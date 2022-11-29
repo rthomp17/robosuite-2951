@@ -21,11 +21,28 @@ from robosuite import make
 # (which uses opencv convention)
 macros.IMAGE_CONVENTION = "opencv"
 
-if __name__ == "__main__":
 
+def make_robosuite_env():
     environment = "Push"
     robot = "Floating"
 
+    # initialize an environment with offscreen renderer
+    env = make(
+        environment,
+        robot,
+        has_renderer=False,
+        ignore_done=True,
+        use_camera_obs=True,
+        use_object_obs=False,
+        camera_names='birdview',
+        camera_heights=512,
+        camera_widths=512,
+    )
+
+    return env
+
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--camera", type=str, default="birdview", help="Name of camera to render")
     parser.add_argument("--video_path", type=str, default="./video_data/")
@@ -37,18 +54,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_rollouts", type=int, default=5)
     args = parser.parse_args()
 
-    # initialize an environment with offscreen renderer
-    env = make(
-        environment,
-        robot,
-        has_renderer=False,
-        ignore_done=True,
-        use_camera_obs=True,
-        use_object_obs=False,
-        camera_names=args.camera,
-        camera_heights=args.height,
-        camera_widths=args.width,
-    )
+    env = make_robosuite_env()
 
     #TODO: Randomize robot start position
 
