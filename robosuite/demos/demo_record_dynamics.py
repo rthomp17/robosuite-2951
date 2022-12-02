@@ -2,8 +2,6 @@
 Record video and dynamics of agent episodes.
 This script uses offscreen rendering.
 
-Example:
-    $ python demo_video_recording.py --environment Lift --robots Panda
 """
 
 from squaternion import Quaternion
@@ -30,9 +28,9 @@ def make_robosuite_env():
     env = make(
         environment,
         robot,
-        has_renderer=False,
+        has_renderer=True,
         ignore_done=True,
-        use_camera_obs=True,
+        use_camera_obs=False,
         use_object_obs=False,
         camera_names='birdview',
         camera_heights=512,
@@ -70,13 +68,15 @@ if __name__ == "__main__":
         for i in range(args.timesteps):
 
             # run a uniformly random agent
-            action = 0.5 * np.random.randn(ndim)
+            action = 0.5 * np.random.randn(2)
             #action[2] = 0.0 #keeps the z-joint from moving
-            obs, reward, done, info = env.step(action)
+            obs, reward, done, info = env.step([0, action[0], action[1], 0])
+            #env.render()
             state = {}
 
             #Save ground truth dynamics info
             for obj in env.model.mujoco_objects: 
+
                 obj_pos = env.sim.data.get_body_xpos(obj._name + "_main")
                 obj_vel = env.sim.data.get_body_xvelp(obj._name + "_main")
                 obj_quat = env.sim.data.get_body_xquat(obj._name + "_main")
@@ -97,6 +97,7 @@ if __name__ == "__main__":
             state[robot_eef_name]['y'] = eef_pos[1]
             state[robot_eef_name]['dx'] = eef_vel[0]
             state[robot_eef_name]['dy'] = eef_vel[1]
+            print(env.sim.data.get_body_xpos("robot0_right_hand"))
 
             frames.append(state)
 
