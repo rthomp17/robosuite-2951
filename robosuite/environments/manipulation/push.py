@@ -168,7 +168,7 @@ class Push(SingleArmEnv):
         # settings for table top
         self.table_full_size = table_full_size
         self.table_friction = table_friction
-        self.table_offset = np.array((0, 0, 1.5))
+        self.table_offset = np.array((0, 0, .8))
 
         # reward configuration
         self.reward_scale = reward_scale
@@ -312,6 +312,12 @@ class Push(SingleArmEnv):
 
         # Arena always gets set to zero origin
         mujoco_arena.set_origin([0, 0, 0])
+
+        mujoco_arena.set_camera(
+            camera_name="tableview",
+            pos=[0,0,1.5],
+            quat=[0.7071, 0, 0, 0.7071],
+        )
 
         # initialize objects of interest
         tex_attrib = {
