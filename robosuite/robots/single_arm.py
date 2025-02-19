@@ -322,17 +322,22 @@ class SingleArm(Manipulator):
             def gripper_qvel(obs_cache):
                 return np.array([self.sim.data.qvel[x] for x in self._ref_gripper_joint_vel_indexes])
 
+            sensors += [gripper_qpos, gripper_qvel]
+            names += [f"{pf}gripper_qpos", f"{pf}gripper_qvel"]
+            actives += [True, True]
+
+
             @sensor(modality=modality)
-            def left_tip_site_force(obs_cache):
-                return np.array(self.left_tip_force)
+            def ee_force(obs_cache):
+                return self.get_sensor_measurement(self.gripper.important_sensors["force_ee"])
 
             @sensor(modality=modality)
-            def right_tip_site_force(obs_cache):
-                return np.array(self.right_tip_force)
+            def ee_torque(obs_cache):
+                return self.get_sensor_measurement(self.gripper.important_sensors["torque_ee"])
 
-
-            sensors += [gripper_qpos, gripper_qvel, left_tip_site_force, right_tip_site_force]
-            #names += [f"{pf}gripper_qpos", f"{pf}gripper_qvel", f"{pf}left_tip_force",  f"{pf}right_tip_force"]
+            sensors += [ee_force, ee_torque]
+            names += [f"{pf}ee_force", f"{pf}ee_torque"]
+            actives += [True, True]
 
         # Create observables for this robot
         for name, s in zip(names, sensors):
